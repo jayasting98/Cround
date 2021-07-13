@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "507071787068",
+    "project_id": "cround-319708",
+    "storage_bucket": "cround-319708.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507071787068:android:9ec89c61ab4a627e6d5339",
+        "android_client_info": {
+          "package_name": "com.cround.cround"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507071787068-u3elkjkdeaiq065sfhr87nrv77h0j164.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cround.cround",
+            "certificate_hash": "ce92c855930b060fed08812c09d9ecbc45f78489"
+          }
+        },
+        {
+          "client_id": "507071787068-fj76rr5ketn0mat8mafsoi1fir1blib5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCovA5z3fFtbXGsJSO1Q2MCFp2P2x8KfJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "507071787068-fj76rr5ketn0mat8mafsoi1fir1blib5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
