@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,16 +67,23 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.nav_fragment_settings:
                         navController.navigate(R.id.action_nav_fragment_main_to_nav_fragment_settings);
-                        drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_signOut:
                         AuthUI.getInstance().signOut(MainActivity.this);
-                        drawerLayout.closeDrawers();
                         break;
                     default:
                 }
                 drawerLayout.close();
                 return false;
+            }
+        });
+
+        View drawerMenuHeader = navigationView.getHeaderView(0);
+        drawerMenuHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.action_nav_fragment_main_to_nav_fragment_user_profile);
+                drawerLayout.close();
             }
         });
     }

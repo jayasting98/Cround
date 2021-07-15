@@ -6,10 +6,10 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_fragment_settings"
-            android:title="@string/menu_settings" />
+            android:title="@string/menu_drawer_settings" />
         <item
             android:id="@+id/nav_signOut"
-            android:title="@string/menu_signout" />
+            android:title="@string/menu_drawer_signout" />
     </group>
 
 </menu>
