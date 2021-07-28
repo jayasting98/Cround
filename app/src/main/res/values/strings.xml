@@ -1,7 +1,28 @@
 <resources>
     <string name="app_name">Cround</string>
 
-    <string name="activity_signIn_button_text">Sign In/Sign Up</string>
+    <string name="fragment_signIn_editText_username">Email or Username</string>
+    <string name="fragment_signIn_editText_password">Password</string>
+    <string name="fragment_signIn_button_signIn_text">Sign In</string>
+    <string name="fragment_signIn_button_signUp_text">Sign Up</string>
+    <string name="fragment_signIn_textView_hint_invalidCredentials">Invalid credentials</string>
+
+    <string name="fragment_signUp_button_signIn_text">I already have an account</string>
+    <string name="fragment_signUp_editText_email">Email</string>
+    <string name="fragment_signUp_editText_username">Username</string>
+    <string name="fragment_signUp_textView_hint_allRequired">All fields are required</string>
+    <string name="fragment_signUp_textView_hint_longUsername">Username must be at most 20 characters long</string>
+    <string name="fragment_signUp_textView_hint_invalidUsername">Username can only be alphanumeric or have - or _</string>
+    <string name="fragment_signUp_textView_hint_usernameStartEnd">Username cannot start or end with - or _</string>
+    <string name="fragment_signUp_textView_hint_invalidEmail">Email is invalid</string>
+    <string name="fragment_signUp_textView_hint_shortPassword">Password must be at least 10 characters long.</string>
+    <string name="fragment_signUp_textView_hint_longPassword">Password must be at most 60 characters long.</string>
+    <string name="fragment_signUp_textView_hint_passwordNumbers">Password must have numbers.</string>
+    <string name="fragment_signUp_textView_hint_passwordLowercase">Password must have lowercase letters.</string>
+    <string name="fragment_signUp_textView_hint_passwordUppercase">Password must have uppercase letters.</string>
+    <string name="fragment_signUp_textView_hint_invalidPassword"><![CDATA[Password can only contain the special characters !@#$%^&*-_+=?]]></string>
+    <string name="fragment_signUp_textView_hint_usernameExists">Username may already exist</string>
+    <string name="fragment_signUp_textView_hint_emailExists">Email may already exist</string>
 
     <string name="menu_drawer_header_name">Name</string>
     <string name="menu_drawer_header_username">Username</string>

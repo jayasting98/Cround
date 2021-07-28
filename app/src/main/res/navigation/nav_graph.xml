@@ -5,6 +5,15 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/nav_fragment_main">
 
+<!--    <fragment-->
+<!--        android:id="@+id/nav_fragment_signin"-->
+<!--        android:name="com.cround.cround.signin.SignInFragment"-->
+<!--        tools:layout="@layout/fragment_sign_in" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_nav_fragment_signin_to_nav_fragment_main"-->
+<!--            app:destination="@id/nav_fragment_main" />-->
+<!--    </fragment>-->
+
     <fragment
         android:id="@+id/nav_fragment_main"
         android:name="com.cround.cround.MainFragment"
@@ -16,6 +25,9 @@
         <action
             android:id="@+id/action_nav_fragment_main_to_nav_fragment_user_profile"
             app:destination="@id/nav_fragment_user_profile" />
+<!--        <action-->
+<!--            android:id="@+id/action_nav_fragment_main_to_nav_fragment_signin"-->
+<!--            app:destination="@id/nav_fragment_signin" />-->
     </fragment>
 
     <fragment
