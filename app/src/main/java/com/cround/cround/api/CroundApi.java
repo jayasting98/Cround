@@ -13,8 +13,9 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface CroundApi {
-//    public static final String BASE_URL = "http://10.0.2.2:5001/cround-319708/asia-northeast1/beta_0_1_0/";
-    public static final String BASE_URL = "https://asia-northeast1-cround-319708.cloudfunctions.net/beta_0_1_0/";
+    // TODO: Switch CroundApi BASE_URL
+    public static final String BASE_URL = "http://10.0.2.2:5001/cround-319708/asia-northeast1/beta_0_1_0/";
+//    public static final String BASE_URL = "https://asia-northeast1-cround-319708.cloudfunctions.net/beta_0_1_0/";
 
     @POST("users")
     Call<ResponseBody> registerAccount(@Body CroundApiRequest<SignUpCredentials> signUpCredentialsRequest);

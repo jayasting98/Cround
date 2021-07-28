@@ -1,13 +1,11 @@
 package com.cround.cround.signin;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.util.Patterns;
@@ -26,30 +24,16 @@ import com.cround.cround.api.EmailCredentials;
 import com.cround.cround.api.SuccessfulResponse;
 import com.cround.cround.api.UnsuccessfulResponse;
 import com.cround.cround.api.UsernameCredentials;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
-import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.functions.FirebaseFunctions;
-import com.google.firebase.functions.FirebaseFunctionsException;
-import com.google.firebase.functions.HttpsCallableResult;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -58,7 +42,7 @@ import retrofit2.Response;
 
 public class SignInFragment extends Fragment {
 
-    private SignInActivity signInActivity;
+    private MainActivity mainActivity;
     private EditText usernameEditText;
     private EditText passwordEditText;
     private TextView hintTextView;
@@ -70,10 +54,8 @@ public class SignInFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static SignInFragment newInstance(SignInActivity signInActivity) {
+    public static SignInFragment newInstance() {
         SignInFragment fragment = new SignInFragment();
-        fragment.signInActivity = signInActivity;
         return fragment;
     }
 
@@ -93,11 +75,17 @@ public class SignInFragment extends Fragment {
         hintTextView.setText("");
         signInButton = view.findViewById(R.id.fragment_signIn_button_signIn);
         signUpButton = view.findViewById(R.id.fragment_signIn_button_signUp);
-        firebaseAuth = FirebaseAuth.getInstance();
-//        firebaseAuth.useEmulator("10.0.2.2", 9099); // TODO
+        mainActivity = (MainActivity) getActivity();
+        firebaseAuth = mainActivity.getFirebaseAuth();
         initialise();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     private void initialise() {
@@ -123,7 +111,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void emailSignIn(String email, String password) {
-        signInActivity.getCroundApi()
+        mainActivity.getCroundApi()
                 .validateEmailCredentials(new CroundApiRequest<>(new EmailCredentials(email, password)))
                 .enqueue(new Callback<ResponseBody>() {
             @Override
@@ -165,7 +153,7 @@ public class SignInFragment extends Fragment {
                             Log.e("Sign In", "Unknown error.");
                             break;
                     }
-                    Toast.makeText(signInActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
                 }
             }
 
@@ -177,13 +165,13 @@ public class SignInFragment extends Fragment {
                     sb.append(ste.toString()).append("\n");
                 }
                 Log.e("Sign In", sb.toString());
-                Toast.makeText(signInActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
             }
         });
     }
 
     private void usernameSignIn(String username, String password) {
-        signInActivity.getCroundApi()
+        mainActivity.getCroundApi()
                 .validateUsernameCredentials(new CroundApiRequest<>(new UsernameCredentials(username, password)))
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -225,7 +213,7 @@ public class SignInFragment extends Fragment {
                             Log.e("Sign In", "Unknown error.");
                             break;
                     }
-                    Toast.makeText(signInActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
                 }
             }
 
@@ -237,7 +225,7 @@ public class SignInFragment extends Fragment {
                     sb.append(ste.toString()).append("\n");
                 }
                 Log.e("Sign In", sb.toString());
-                Toast.makeText(signInActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
             }
         });
     }
@@ -248,9 +236,9 @@ public class SignInFragment extends Fragment {
             public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Log.d("Sign In", "Custom token validated.");
-                    signInActivity.enterMainActivity();
+                    NavHostFragment.findNavController(SignInFragment.this).navigate(R.id.action_nav_fragment_signin_to_nav_fragment_main);
                 } else {
-                    Toast.makeText(signInActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -260,7 +248,8 @@ public class SignInFragment extends Fragment {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signInActivity.loadSignUpFragment();
+                NavHostFragment.findNavController(SignInFragment.this)
+                        .navigate(R.id.action_nav_fragment_signin_to_nav_fragment_signup);
             }
         });
     }

@@ -26,7 +26,7 @@
 <!--        app:navGraph="@navigation/nav_graph" />-->
 
     <FrameLayout
-        android:id="@+id/fragment_main_layout_frame"
+        android:id="@+id/fragment_main_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

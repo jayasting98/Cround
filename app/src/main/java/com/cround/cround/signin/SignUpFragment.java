@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.util.Patterns;
@@ -15,33 +16,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cround.cround.MainActivity;
 import com.cround.cround.R;
 import com.cround.cround.api.CroundApiRequest;
-import com.cround.cround.api.ResponseResult;
 import com.cround.cround.api.SignUpCredentials;
 import com.cround.cround.api.SuccessfulResponse;
 import com.cround.cround.api.UnsuccessfulResponse;
 import com.cround.cround.api.UsernameCredentials;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.SignInMethodQueryResult;
-import com.google.firebase.functions.FirebaseFunctions;
-import com.google.firebase.functions.HttpsCallableResult;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
@@ -51,7 +42,17 @@ import retrofit2.Response;
 
 public class SignUpFragment extends Fragment {
 
-    private SignInActivity signInActivity;
+    private static final String PASSWORD_REGEX_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?!.*[^0-9A-Za-z!@#$%^&*\\-_+=?]).{10,60}$";
+//            "^" // must apply from start
+//            + "(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])" // must have lowercase, uppercase, digits
+//            + "(?!.*[^0-9A-Za-z!@#$%^&*\-_+=?])" // for excluding characters other than these
+//            + ".{10,60}" // minimum length 10, maximum 60
+//            + "$"; // must apply until end
+    public static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX_PATTERN);
+    private static final String USERNAME_REGEX_PATTERN = "^(?!.*[^a-zA-Z0-9\\-_]).{1,20}$";
+    public static final Pattern USERNAME_PATTERN = Pattern.compile(USERNAME_REGEX_PATTERN);
+
+    private MainActivity mainActivity;
     private EditText emailEditText;
     private EditText usernameEditText;
     private EditText passwordEditText;
@@ -64,9 +65,8 @@ public class SignUpFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static SignUpFragment newInstance(SignInActivity signInActivity) {
+    public static SignUpFragment newInstance() {
         SignUpFragment fragment = new SignUpFragment();
-        fragment.signInActivity = signInActivity;
         return fragment;
     }
 
@@ -87,8 +87,8 @@ public class SignUpFragment extends Fragment {
         hintTextView.setText("");
         signUpButton = view.findViewById(R.id.fragment_signUp_button_signUp);
         signInButton = view.findViewById(R.id.fragment_signUp_button_signIn);
-        firebaseAuth = FirebaseAuth.getInstance();
-//        firebaseAuth.useEmulator("10.0.2.2", 9099); // TODO
+        mainActivity = (MainActivity) getActivity();
+        firebaseAuth = mainActivity.getFirebaseAuth();
         initialise();
         return view;
     }
@@ -136,7 +136,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private void signUp(String username, String email, String password) {
-        signInActivity.getCroundApi()
+        mainActivity.getCroundApi()
                 .registerAccount(new CroundApiRequest<>(new SignUpCredentials(username, email, password))).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -235,7 +235,7 @@ public class SignUpFragment extends Fragment {
                             Log.e("Sign In", "Unknown error.");
                             break;
                     }
-                    Toast.makeText(signInActivity, "Could not sign-up. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-up. Please try again.", Toast.LENGTH_SHORT);
                 }
             }
 
@@ -247,13 +247,13 @@ public class SignUpFragment extends Fragment {
                     sb.append(ste.toString()).append("\n");
                 }
                 Log.e("Sign Up", sb.toString());
-                Toast.makeText(signInActivity, "Could not sign-up. Please try again.", Toast.LENGTH_SHORT);
+                Toast.makeText(mainActivity, "Could not sign-up. Please try again.", Toast.LENGTH_SHORT);
             }
         });
     }
 
     private void usernameSignIn(String username, String password) {
-        signInActivity.getCroundApi()
+        mainActivity.getCroundApi()
                 .validateUsernameCredentials(new CroundApiRequest<>(new UsernameCredentials(username, password)))
                 .enqueue(new Callback<ResponseBody>() {
             @Override
@@ -295,7 +295,7 @@ public class SignUpFragment extends Fragment {
                             Log.e("Sign In", "Unknown error.");
                             break;
                     }
-                    Toast.makeText(signInActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
                 }
             }
 
@@ -307,7 +307,7 @@ public class SignUpFragment extends Fragment {
                     sb.append(ste.toString()).append("\n");
                 }
                 Log.e("Sign In", sb.toString());
-                Toast.makeText(signInActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
             }
         });
     }
@@ -318,16 +318,17 @@ public class SignUpFragment extends Fragment {
             public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Log.d("Sign In", "Custom token validated.");
-                    signInActivity.enterMainActivity();
+                    NavHostFragment.findNavController(SignUpFragment.this)
+                            .navigate(R.id.action_nav_fragment_signup_to_nav_fragment_main);
                 } else {
-                    Toast.makeText(signInActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
                 }
             }
         });
     }
 
     private boolean isPasswordValid(String password) {
-        return SignInActivity.PASSWORD_PATTERN.matcher(password).matches();
+        return PASSWORD_PATTERN.matcher(password).matches();
     }
 
     private boolean isEmailValid(String email) {
@@ -335,14 +336,15 @@ public class SignUpFragment extends Fragment {
     }
 
     private boolean isUsernameValid(String username) {
-        return SignInActivity.USERNAME_PATTERN.matcher(username).matches();
+        return USERNAME_PATTERN.matcher(username).matches();
     }
 
     private void initialiseSignInButton() {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signInActivity.loadSignInFragment();
+                NavHostFragment.findNavController(SignUpFragment.this)
+                        .navigate(R.id.action_nav_fragment_signup_to_nav_fragment_signin);
             }
         });
     }
