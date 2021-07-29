@@ -3,11 +3,12 @@
 
     <string name="fragment_signIn_editText_username">Email or Username</string>
     <string name="fragment_signIn_editText_password">Password</string>
-    <string name="fragment_signIn_button_signIn_text">Sign In</string>
-    <string name="fragment_signIn_button_signUp_text">Sign Up</string>
+    <string name="fragment_signIn_textView_signIn_text">Sign In</string>
+    <string name="fragment_signIn_textView_signUp_text"><u>I don\'t have an account</u></string>
     <string name="fragment_signIn_textView_hint_invalidCredentials">Invalid credentials</string>
 
-    <string name="fragment_signUp_button_signIn_text">I already have an account</string>
+    <string name="fragment_signUp_textView_signUp_text">Sign Up</string>
+    <string name="fragment_signUp_textView_signIn_text"><u>I already have an account</u></string>
     <string name="fragment_signUp_editText_email">Email</string>
     <string name="fragment_signUp_editText_username">Username</string>
     <string name="fragment_signUp_textView_hint_allRequired">All fields are required</string>
@@ -39,7 +40,7 @@
 
     <string name="delete_account_setting_dialog_title">"Delete Account?"</string>
     <string name="field_password_hint">"Password"</string>
-    <string name="delete_account_setting_dialog_message">"This will permanently delete your account and all your data, including your scheduler.\n\nType in your password to confirm."</string>
+    <string name="delete_account_setting_dialog_message">"This will permanently delete your account and all your data.\n\nType in your password to confirm."</string>
     <string name="delete_account_setting_dialog_affirmative">"Delete account"</string>
     <string name="cancel">"Cancel"</string>
     <string name="fragment_userProfile_bio">User bio</string>

@@ -118,6 +118,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
+                            firebaseAuth.signOut();
                             Toast.makeText(mainActivity, "Account deleted.", Toast.LENGTH_SHORT).show();
                             NavHostFragment.findNavController(SettingsFragment.this)
                                     .navigate(R.id.action_nav_fragment_settings_to_nav_fragment_signin);

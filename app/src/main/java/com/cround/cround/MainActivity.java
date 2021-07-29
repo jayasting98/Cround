@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                                         .getResponseError()
                                         .getErrno();
                                 switch (errno) {
+                                    case -1:
                                     case 1:
                                         Log.e("loadUserDetails", "User does not exist.");
                                         break;

@@ -1,5 +1,6 @@
 package com.cround.cround.signin;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -47,7 +49,7 @@ public class SignInFragment extends Fragment {
     private EditText passwordEditText;
     private TextView hintTextView;
     private Button signInButton;
-    private Button signUpButton;
+    private TextView signUpTextView;
     private FirebaseAuth firebaseAuth;
 
     public SignInFragment() {
@@ -74,7 +76,7 @@ public class SignInFragment extends Fragment {
         hintTextView = view.findViewById(R.id.fragment_signIn_textView_hint);
         hintTextView.setText("");
         signInButton = view.findViewById(R.id.fragment_signIn_button_signIn);
-        signUpButton = view.findViewById(R.id.fragment_signIn_button_signUp);
+        signUpTextView = view.findViewById(R.id.fragment_signIn_textView_signUp);
         mainActivity = (MainActivity) getActivity();
         firebaseAuth = mainActivity.getFirebaseAuth();
         initialise();
@@ -97,6 +99,8 @@ public class SignInFragment extends Fragment {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                InputMethodManager inputMethodManager = (InputMethodManager) mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                inputMethodManager.hideSoftInputFromWindow(mainActivity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 hintTextView.setText("");
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
@@ -245,7 +249,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void initialiseSignUpButton() {
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(SignInFragment.this)
