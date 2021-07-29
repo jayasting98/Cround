@@ -65,7 +65,7 @@ public class MainFragment extends Fragment {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 switch (item.getItemId()) {
@@ -86,15 +86,15 @@ public class MainFragment extends Fragment {
                 }
             }
         });
-        FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_main_frameLayout, new TimelineFragment());
-        fragmentTransaction.commit();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_main_frameLayout, new TimelineFragment());
+        fragmentTransaction.commit();
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 }

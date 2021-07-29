@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.util.Consumer;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -56,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private CroundApi croundApi;
     private UserDetails userDetails;
-    private Map<String, String> headerMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.useEmulator("10.0.2.2", 9099); // TODO
-
-        headerMap = new HashMap<>();
     }
 
     private void initialiseNavigation() {
@@ -103,56 +101,70 @@ public class MainActivity extends AppCompatActivity {
         initialiseDrawerMenuNavigation();
     }
 
+    public void requestWithAuthorisation(Map<String, String> headerMap, Consumer<Map<String, String>> headerMapConsumer) {
+        firebaseUser.getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<GetTokenResult> task) {
+                if (task.isSuccessful()) {
+                    String idToken = task.getResult().getToken();
+                    headerMap.put("Authorization", "Bearer " + idToken);
+                    headerMapConsumer.accept(headerMap);
+                }
+            }
+        });
+    }
+
+    public void requestWithAuthorisation(Consumer<Map<String, String>> headerMapConsumer) {
+        requestWithAuthorisation(new HashMap<>(), headerMapConsumer);
+    }
+
     public void loadUserDetails() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (userDetails == null || currentUser != firebaseUser) {
+        if (currentUser != null && (userDetails == null || currentUser != firebaseUser)) {
             firebaseUser = currentUser;
-            firebaseUser.getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+            requestWithAuthorisation(new Consumer<Map<String, String>>() {
                 @Override
-                public void onComplete(@NonNull @NotNull Task<GetTokenResult> task) {
-                    if (task.isSuccessful()) {
-                        String idToken = task.getResult().getToken();
-                        headerMap.put("Authorization", "Bearer " + idToken);
-                        croundApi.getUserDetails(firebaseUser.getUid(), headerMap).enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if (response.isSuccessful()) {
-                                    SuccessfulResponse<UserDetails> userDetailsSuccessfulResponse =
-                                            new GsonBuilder().create()
-                                                    .fromJson(new BufferedReader(response.body().charStream()),
-                                                            new TypeToken<SuccessfulResponse<UserDetails>>(){}
-                                                                    .getType());
-                                    userDetails = userDetailsSuccessfulResponse.getResult().getData();
-                                    initialiseDrawerMenuHeader();
-                                } else {
-                                    UnsuccessfulResponse unsuccessfulResponse = new GsonBuilder()
-                                            .create().fromJson(new BufferedReader(response.errorBody()
-                                                    .charStream()), UnsuccessfulResponse.class);
-                                    switch (unsuccessfulResponse.getResponseError().getErrno()) {
-                                        case 1:
-                                            Log.e("loadUserDetails", "User does not exist.");
-                                            break;
-                                        case 0:
-                                        default:
-                                            Log.e("loadUserDetails", "Unknown server-side error.");
-                                            break;
-                                    }
+                public void accept(Map<String, String> headerMap) {
+                    croundApi.getUserDetails(firebaseUser.getUid(), headerMap).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                SuccessfulResponse<UserDetails> userDetailsSuccessfulResponse =
+                                        new GsonBuilder().create()
+                                                .fromJson(new BufferedReader(response.body().charStream()),
+                                                        new TypeToken<SuccessfulResponse<UserDetails>>(){}
+                                                                .getType());
+                                userDetails = userDetailsSuccessfulResponse.getResult().getData();
+                                initialiseDrawerMenuHeader();
+                            } else {
+                                int errno = new GsonBuilder()
+                                        .create().fromJson(new BufferedReader(response.errorBody()
+                                                .charStream()), UnsuccessfulResponse.class)
+                                        .getResponseError()
+                                        .getErrno();
+                                switch (errno) {
+                                    case 1:
+                                        Log.e("loadUserDetails", "User does not exist.");
+                                        break;
+                                    case 0:
+                                    default:
+                                        Log.e("loadUserDetails", "Unknown server-side error.");
+                                        break;
                                 }
                             }
+                        }
 
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                Log.e("loadUserDetails", "Unknown error.");
-                                StringBuilder sb = new StringBuilder();
-                                sb.append(t.toString());
-                                for (StackTraceElement ste : t.getStackTrace()) {
-                                    sb.append(ste.toString()).append("\n");
-                                }
-                                Log.e("loadUserDetails", sb.toString());
-                                Toast.makeText(MainActivity.this, "Could not load.", Toast.LENGTH_SHORT);
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e("loadUserDetails", "Unknown error.");
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(t.toString());
+                            for (StackTraceElement ste : t.getStackTrace()) {
+                                sb.append(ste.toString()).append("\n");
                             }
-                        });
-                    }
+                            Log.e("loadUserDetails", sb.toString());
+                        }
+                    });
                 }
             });
         }

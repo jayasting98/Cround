@@ -153,7 +153,7 @@ public class SignInFragment extends Fragment {
                             Log.e("Sign In", "Unknown error.");
                             break;
                     }
-                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -165,7 +165,7 @@ public class SignInFragment extends Fragment {
                     sb.append(ste.toString()).append("\n");
                 }
                 Log.e("Sign In", sb.toString());
-                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -213,7 +213,7 @@ public class SignInFragment extends Fragment {
                             Log.e("Sign In", "Unknown error.");
                             break;
                     }
-                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -225,7 +225,7 @@ public class SignInFragment extends Fragment {
                     sb.append(ste.toString()).append("\n");
                 }
                 Log.e("Sign In", sb.toString());
-                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -238,7 +238,7 @@ public class SignInFragment extends Fragment {
                     Log.d("Sign In", "Custom token validated.");
                     NavHostFragment.findNavController(SignInFragment.this).navigate(R.id.action_nav_fragment_signin_to_nav_fragment_main);
                 } else {
-                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

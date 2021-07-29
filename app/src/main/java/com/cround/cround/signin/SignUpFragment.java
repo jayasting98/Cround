@@ -235,7 +235,7 @@ public class SignUpFragment extends Fragment {
                             Log.e("Sign In", "Unknown error.");
                             break;
                     }
-                    Toast.makeText(mainActivity, "Could not sign-up. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-up. Please try again.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -247,7 +247,7 @@ public class SignUpFragment extends Fragment {
                     sb.append(ste.toString()).append("\n");
                 }
                 Log.e("Sign Up", sb.toString());
-                Toast.makeText(mainActivity, "Could not sign-up. Please try again.", Toast.LENGTH_SHORT);
+                Toast.makeText(mainActivity, "Could not sign-up. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -295,7 +295,7 @@ public class SignUpFragment extends Fragment {
                             Log.e("Sign In", "Unknown error.");
                             break;
                     }
-                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -307,7 +307,7 @@ public class SignUpFragment extends Fragment {
                     sb.append(ste.toString()).append("\n");
                 }
                 Log.e("Sign In", sb.toString());
-                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -321,7 +321,7 @@ public class SignUpFragment extends Fragment {
                     NavHostFragment.findNavController(SignUpFragment.this)
                             .navigate(R.id.action_nav_fragment_signup_to_nav_fragment_main);
                 } else {
-                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT);
+                    Toast.makeText(mainActivity, "Could not sign-in. Please try again.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
