@@ -11,11 +11,19 @@
         tools:layout="@layout/fragment_signin" >
         <action
             android:id="@+id/action_nav_fragment_signin_to_nav_fragment_main"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/nav_fragment_main"
             app:popUpTo="@id/nav_fragment_signin"
             app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_nav_fragment_signin_to_nav_fragment_signup"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/nav_fragment_signup"/>
     </fragment>
 
@@ -25,11 +33,19 @@
         tools:layout="@layout/fragment_signup" >
         <action
             android:id="@+id/action_nav_fragment_signup_to_nav_fragment_main"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/nav_fragment_main"
             app:popUpTo="@id/nav_fragment_signin"
             app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_nav_fragment_signup_to_nav_fragment_signin"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/nav_fragment_signin"
             app:popUpTo="@id/nav_fragment_signin"
             app:popUpToInclusive="true"/>
@@ -42,12 +58,24 @@
         tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_nav_fragment_main_to_nav_fragment_settings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/nav_fragment_settings" />
         <action
             android:id="@+id/action_nav_fragment_main_to_nav_fragment_user_profile"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/nav_fragment_user_profile" />
         <action
             android:id="@+id/action_nav_fragment_main_to_nav_fragment_signin"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/nav_fragment_signin"
             app:popUpTo="@id/nav_fragment_main"
             app:popUpToInclusive="true"/>
@@ -60,6 +88,10 @@
         tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_nav_fragment_settings_to_nav_fragment_signin"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:destination="@id/nav_fragment_signin"
             app:popUpTo="@id/nav_fragment_main"
             app:popUpToInclusive="true"/>
@@ -68,7 +100,6 @@
     <fragment
         android:id="@+id/nav_fragment_user_profile"
         android:name="com.cround.cround.UserProfileFragment"
-        android:label="User Profile"
         tools:layout="@layout/fragment_user_profile" >
         <argument
             android:name="nav_arg_user_profile_uid"

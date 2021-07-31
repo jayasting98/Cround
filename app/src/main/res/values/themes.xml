@@ -26,17 +26,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="actionBarTheme">@style/CroundActionBar</item>
-        <item name="bottomNavigationStyle">@style/CroundBottomNavigation</item>
+        <item name="drawerArrowStyle">@style/Widget.Cround.DrawerArrowToggle</item>
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
     </style>
-    <style name="CroundActionBar" parent="Widget.MaterialComponents.ActionBar.Primary">
-        <item name="android:minHeight">?attr/actionBarSize</item>
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
-        <item name="android:textColorSecondary">?attr/colorOnPrimary</item>
-    </style>
-    <style name="CroundBottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="itemTextColor">?attr/colorOnPrimary</item>
+    <style name="Widget.Cround.DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">?attr/colorOnPrimary</item>
     </style>
 </resources>

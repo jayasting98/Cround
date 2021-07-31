@@ -95,6 +95,6 @@ public class MainFragment extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_main_frameLayout, new TimelineFragment());
         fragmentTransaction.commit();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 }

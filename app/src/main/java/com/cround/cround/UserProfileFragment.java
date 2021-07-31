@@ -4,9 +4,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +36,7 @@ import retrofit2.Response;
 public class UserProfileFragment extends Fragment {
 
     MainActivity mainActivity;
+    NavController navController;
     TextView displayNameTextView;
     TextView usernameTextView;
     TextView descriptionTextView;
@@ -57,6 +62,9 @@ public class UserProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         mainActivity = (MainActivity) getActivity();
+        NavHostFragment navHostFragment = (NavHostFragment) mainActivity
+                .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navController = navHostFragment.getNavController();
         displayNameTextView = view.findViewById(R.id.fragment_user_profile_displayName);
         usernameTextView = view.findViewById(R.id.fragment_user_profile_username);
         descriptionTextView = view.findViewById(R.id.fragment_user_profile_description);
@@ -66,6 +74,11 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration
+                .Builder(navController.getGraph())
+                .build();
+        Toolbar toolbar = view.findViewById(R.id.fragment_user_profile_materialToolbar);
+        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
         String uid = UserProfileFragmentArgs.fromBundle(getArguments()).getNavArgUserProfileUid();
         if (mainActivity.getFirebaseAuth().getCurrentUser().getUid().equals(uid)) {
             mainActivity.loadUserDetails();
