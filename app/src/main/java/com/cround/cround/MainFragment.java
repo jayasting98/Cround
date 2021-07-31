@@ -3,12 +3,11 @@ package com.cround.cround;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,54 +16,30 @@ import android.view.ViewGroup;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MainFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private BottomNavigationView bottomNavigationView;
+    private MainActivity mainActivity;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
 
     public MainFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
+    public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -72,7 +47,21 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-        BottomNavigationView bottomNavigationView = v.findViewById(R.id.activity_main_barBottom);
+        bottomNavigationView = v.findViewById(R.id.activity_main_barBottom);
+        mainActivity = (MainActivity) getActivity();
+        firebaseAuth = mainActivity.getFirebaseAuth();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (firebaseUser == null) {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_nav_fragment_main_to_nav_fragment_signin);
+        }
+        mainActivity.loadUserDetails();
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
@@ -81,15 +70,15 @@ public class MainFragment extends Fragment {
 
                 switch (item.getItemId()) {
                     case R.id.nav_timeline:
-                        fragmentTransaction.replace(R.id.fragment_main_layout_frame, new TimelineFragment());
+                        fragmentTransaction.replace(R.id.fragment_main_frameLayout, new TimelineFragment());
                         fragmentTransaction.commit();
                         return true;
                     case R.id.nav_explore:
-                        fragmentTransaction.replace(R.id.fragment_main_layout_frame, new ExploreFragment());
+                        fragmentTransaction.replace(R.id.fragment_main_frameLayout, new ExploreFragment());
                         fragmentTransaction.commit();
                         return true;
                     case R.id.nav_notifications:
-                        fragmentTransaction.replace(R.id.fragment_main_layout_frame, new NotificationsFragment());
+                        fragmentTransaction.replace(R.id.fragment_main_frameLayout, new NotificationsFragment());
                         fragmentTransaction.commit();
                         return true;
                     default:
@@ -97,15 +86,15 @@ public class MainFragment extends Fragment {
                 }
             }
         });
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_main_layout_frame, new TimelineFragment());
-        fragmentTransaction.commit();
-        return v;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_main_frameLayout, new TimelineFragment());
+        fragmentTransaction.commit();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 }
