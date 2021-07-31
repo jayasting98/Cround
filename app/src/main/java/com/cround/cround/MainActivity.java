@@ -86,18 +86,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialiseNavigation() {
-//        Toolbar mainActivityToolbar = findViewById(R.id.activity_main_toolbar);
-//        setSupportActionBar(mainActivityToolbar);
-//
-//        Set<Integer> topLevelDestinations = new HashSet<>();
-//        topLevelDestinations.add(R.id.nav_fragment_main);
-//        AppBarConfiguration appBarConfiguration =
-//                new AppBarConfiguration.Builder(topLevelDestinations)
-//                        .setOpenableLayout(drawerLayout)
-//                        .build();
-//        NavigationUI.setupWithNavController(
-//                mainActivityToolbar, navController, appBarConfiguration);
-
         initialiseDrawerMenuNavigation();
     }
 
