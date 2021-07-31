@@ -2,63 +2,140 @@ package com.cround.cround;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UserProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.cround.cround.api.SuccessfulResponse;
+import com.cround.cround.api.UnsuccessfulResponse;
+import com.cround.cround.api.UserDetails;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class UserProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    MainActivity mainActivity;
+    TextView displayNameTextView;
+    TextView usernameTextView;
+    TextView descriptionTextView;
+    UserDetails userDetails;
 
     public UserProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserProfileFragment newInstance(String param1, String param2) {
+    public static UserProfileFragment newInstance() {
         UserProfileFragment fragment = new UserProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        mainActivity = (MainActivity) getActivity();
+        displayNameTextView = view.findViewById(R.id.fragment_user_profile_displayName);
+        usernameTextView = view.findViewById(R.id.fragment_user_profile_username);
+        descriptionTextView = view.findViewById(R.id.fragment_user_profile_description);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        String uid = UserProfileFragmentArgs.fromBundle(getArguments()).getNavArgUserProfileUid();
+        if (mainActivity.getFirebaseAuth().getCurrentUser().getUid().equals(uid)) {
+            mainActivity.loadUserDetails();
+            userDetails = mainActivity.getUserDetails();
+            if (userDetails == null) {
+                Toast.makeText(mainActivity, "Unknown error", Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(this).navigateUp();
+            }
+            initialiseUserProfile();
+        } else {
+            mainActivity.requestWithAuthorisation(new Consumer<Map<String, String>>() {
+                @Override
+                public void accept(Map<String, String> headerMap) {
+                    mainActivity.getCroundApi()
+                            .getUserDetails(uid, headerMap).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                SuccessfulResponse<UserDetails> userDetailsSuccessfulResponse =
+                                        new GsonBuilder().create().fromJson(response.body().charStream(),
+                                                new TypeToken<SuccessfulResponse<UserDetails>>() {
+                                                }.getType());
+                                userDetails = userDetailsSuccessfulResponse.getResult().getData();
+                                initialiseUserProfile();
+                            } else {
+                                int errno = new GsonBuilder().create()
+                                        .fromJson(response.errorBody().charStream(), UnsuccessfulResponse.class)
+                                        .getResponseError()
+                                        .getErrno();
+                                switch (errno) {
+                                    case 1:
+                                        Toast.makeText(mainActivity, "User does not exist", Toast.LENGTH_SHORT).show();
+                                        NavHostFragment.findNavController(UserProfileFragment.this)
+                                                .navigateUp();
+                                        break;
+                                    case 0:
+                                    default:
+                                        Log.e("UPF.onViewCreated", "Unknown server-side error.");
+                                        break;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e("UPF.onViewCreated", "Unknown error.");
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(t.toString());
+                            for (StackTraceElement ste : t.getStackTrace()) {
+                                sb.append(ste.toString()).append("\n");
+                            }
+                            Log.e("UPF.onViewCreated", sb.toString());
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private void initialiseUserProfile() {
+        if (userDetails.isDeleted()) {
+            usernameTextView.setText("DELETED");
+        } else {
+            if (userDetails.getDisplayName() != null) {
+                displayNameTextView.setText(userDetails.getDisplayName());
+            }
+            usernameTextView.setText(userDetails.getUsername());
+            if (userDetails.getDescription() != null) {
+                descriptionTextView.setText(userDetails.getDescription());
+            }
+        }
     }
 }

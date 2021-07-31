@@ -192,7 +192,9 @@ public class MainActivity extends AppCompatActivity {
         drawerMenuHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.action_nav_fragment_main_to_nav_fragment_user_profile);
+                com.cround.cround.MainFragmentDirections.ActionNavFragmentMainToNavFragmentUserProfile loadOwnUserProfileAction
+                        = MainFragmentDirections.actionNavFragmentMainToNavFragmentUserProfile(firebaseUser.getUid());
+                navController.navigate(loadOwnUserProfileAction);
                 drawerLayout.close();
             }
         });
@@ -224,5 +226,9 @@ public class MainActivity extends AppCompatActivity {
 
     public CroundApi getCroundApi() {
         return croundApi;
+    }
+
+    public UserDetails getUserDetails() {
+        return userDetails;
     }
 }

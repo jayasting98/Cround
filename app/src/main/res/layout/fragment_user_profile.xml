@@ -27,11 +27,13 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical">
                 <TextView
+                    android:id="@+id/fragment_user_profile_displayName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/menu_drawer_header_name"
                     android:layout_margin="5dp"/>
                 <TextView
+                    android:id="@+id/fragment_user_profile_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/menu_drawer_header_username"
@@ -39,6 +41,7 @@
             </LinearLayout>
         </LinearLayout>
         <TextView
+            android:id="@+id/fragment_user_profile_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/fragment_userProfile_bio"

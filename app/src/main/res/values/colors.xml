@@ -7,4 +7,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+<!--    <color name="purple_primary_light">#FFD5DDEF</color>-->
+<!--    <color name="purple_secondary_light">#FFBCB8CE</color>-->
+<!--    <color name="purple_intermediate">#FF917898</color>-->
+<!--    <color name="purple_secondary_dark">#FF4C394F</color>-->
+<!--    <color name="purple_primary_dark">#FF2E1A1E</color>-->
+
+    <color name="primary_purple">#512da8</color>
+    <color name="primary_light_purple">#8559da</color>
+    <color name="primary_dark_purple">#140078</color>
+    <color name="secondary_purple">#b39ddb</color>
+    <color name="secondary_light_purple">#e6ceff</color>
+    <color name="secondary_dark_purple">#836fa9</color>
+    <color name="primary_text">#ffffff</color>
+    <color name="secondary_text">#000000</color>
 </resources>

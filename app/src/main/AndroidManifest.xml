@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:windowSoftInputMode="adjustPan"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.Cround">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

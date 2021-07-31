@@ -69,7 +69,11 @@
         android:id="@+id/nav_fragment_user_profile"
         android:name="com.cround.cround.UserProfileFragment"
         android:label="User Profile"
-        tools:layout="@layout/fragment_user_profile" />
+        tools:layout="@layout/fragment_user_profile" >
+        <argument
+            android:name="nav_arg_user_profile_uid"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_fragment_timeline"
