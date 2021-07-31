@@ -87,7 +87,6 @@ public class SignInFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     private void initialise() {

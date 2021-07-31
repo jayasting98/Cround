@@ -69,15 +69,15 @@ public class MainFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 switch (item.getItemId()) {
-                    case R.id.nav_timeline:
+                    case R.id.nav_fragment_timeline:
                         fragmentTransaction.replace(R.id.fragment_main_frameLayout, new TimelineFragment());
                         fragmentTransaction.commit();
                         return true;
-                    case R.id.nav_explore:
+                    case R.id.nav_fragment_explore:
                         fragmentTransaction.replace(R.id.fragment_main_frameLayout, new ExploreFragment());
                         fragmentTransaction.commit();
                         return true;
-                    case R.id.nav_notifications:
+                    case R.id.nav_fragment_notifications:
                         fragmentTransaction.replace(R.id.fragment_main_frameLayout, new NotificationsFragment());
                         fragmentTransaction.commit();
                         return true;
@@ -95,6 +95,5 @@ public class MainFragment extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_main_frameLayout, new TimelineFragment());
         fragmentTransaction.commit();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 }

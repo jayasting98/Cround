@@ -86,18 +86,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialiseNavigation() {
-        Toolbar mainActivityToolbar = findViewById(R.id.activity_main_toolbar);
-        setSupportActionBar(mainActivityToolbar);
-
-        Set<Integer> topLevelDestinations = new HashSet<>();
-        topLevelDestinations.add(R.id.nav_fragment_main);
-        AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(topLevelDestinations)
-                        .setOpenableLayout(drawerLayout)
-                        .build();
-        NavigationUI.setupWithNavController(
-                mainActivityToolbar, navController, appBarConfiguration);
-
         initialiseDrawerMenuNavigation();
     }
 
@@ -206,11 +194,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_fragment_settings:
-                        navController.navigate(R.id.action_nav_fragment_main_to_nav_fragment_settings);
+                        navController.navigate(MainFragmentDirections.actionNavFragmentMainToNavFragmentSettings());
                         break;
                     case R.id.nav_signOut:
                         firebaseAuth.signOut();
-                        navController.navigate(R.id.action_nav_fragment_main_to_nav_fragment_signin);
+                        navController.navigate(MainFragmentDirections.actionNavFragmentMainToNavFragmentSignin());
                         break;
                     default:
                 }
